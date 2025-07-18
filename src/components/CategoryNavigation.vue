@@ -36,7 +36,9 @@
   padding: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
 .category-nav button {
@@ -49,6 +51,7 @@
   font-weight: bold;
   text-transform: uppercase;
   transition: background-color 0.2s;
+  flex-shrink: 0;
 }
 
 .category-nav button.active {

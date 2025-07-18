@@ -49,4 +49,15 @@ const getRibbonText = (game: IGame) => {
   font-size: 24px;
   font-weight: bold;
 }
+
+@media (max-width: 480px) {
+  .game-grid {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .no-games {
+    font-size: 20px;
+  }
+}
 </style>
