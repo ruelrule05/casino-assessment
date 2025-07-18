@@ -21,7 +21,7 @@ defineProps<{
     <img :src="game.image" :alt="game.name">
 
     <div class="overlay">
-      <h3>{{ game.name }}</h3>
+      <h3 class="game-name">{{ game.name }}</h3>
       <button class="play-button">Play</button>
     </div>
   </div>
