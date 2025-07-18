@@ -44,6 +44,7 @@ const getRibbonText = (game: IGame) => {
 }
 
 .no-games {
+  grid-column: 1 / -1;
   text-align: center;
   font-size: 24px;
   font-weight: bold;

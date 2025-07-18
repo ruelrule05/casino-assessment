@@ -11,7 +11,7 @@ defineProps<{
 
 <template>
   <div class="game-card">
-    <div v-if="showRibbon" class="ribbon capitalize">
+    <div v-if="showRibbon" class="ribbon uppercase">
       {{ ribbonText }}
     </div>
     <div v-if="game.jackpot" class="jackpot">
@@ -52,8 +52,8 @@ defineProps<{
 
 .ribbon {
   position: absolute;
-  top: 10px;
-  right: -26px;
+  top: 8px;
+  right: -18px;
   background-color: #8dc63f;
   color: #ffffff;
   padding: 3px 25px;
