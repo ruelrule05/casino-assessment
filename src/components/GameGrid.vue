@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+
 </script>
 
 <template>
-  <RouterView />
+  <div class="game-grid">
+
+  </div>
 </template>
 
 <style scoped>
+
 </style>
