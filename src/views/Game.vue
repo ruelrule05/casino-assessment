@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import CategoryNavigation from "@/components/CategoryNavigation.vue";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {type Category} from "@/types/Category.ts";
 import {type Game as IGame} from "@/types/Game";
 import {type ApiGame} from "@/types/ApiGame.ts";
 import axios from "axios";
 import GameGrid from "@/components/GameGrid.vue";
 import type {Jackpot} from "@/types/Jackpot.ts";
+
+let jackpotInterval: number;
 
 const categories = ref<Category[]>([
   { id: 'top', name: 'Top Games' },
@@ -59,6 +61,25 @@ const fetchInitialData = async () => {
   }
 }
 
+const updateJackpots = async () => {
+  console.info(`Updating jackpots`)
+
+  try {
+    const response = await axios.get<Jackpot[]>(jackpotUri);
+    const mappedJackpot = new Map(response.data.map(jackpot => [jackpot.game, jackpot.amount]));
+
+    allGames.value.forEach(game => {
+      if (mappedJackpot.has(game.id)) {
+        game.jackpot = mappedJackpot.get(game.id);
+      } else {
+        game.jackpot = 0;
+      }
+    });
+  } catch (error) {
+    console.error(`Failed to update jackpots ${error}`);
+  }
+}
+
 const handleCategoryChanged = (category: string) => {
   activeCategory.value = category;
 }
@@ -75,6 +96,12 @@ const filteredGames = computed<IGame[]>(() => {
 
 onMounted( () => {
   fetchInitialData()
+
+  jackpotInterval = setInterval(updateJackpots, 5000);
+})
+
+onUnmounted(() => {
+  clearInterval(jackpotInterval)
 })
 </script>
 
