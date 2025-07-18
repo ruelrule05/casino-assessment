@@ -6,6 +6,7 @@ import {type Game as IGame} from "@/types/Game";
 import {type ApiGame} from "@/types/ApiGame.ts";
 import axios from "axios";
 import GameGrid from "@/components/GameGrid.vue";
+import type {Jackpot} from "@/types/Jackpot.ts";
 
 const categories = ref<Category[]>([
   { id: 'top', name: 'Top Games' },
@@ -25,18 +26,22 @@ const allGames = ref<IGame[]>([]);
 const loading = ref<boolean>(true);
 
 const gameListUri = import.meta.env.VITE_GAME_LIST_URI;
+const jackpotUri = import.meta.env.VITE_JACKPOT_URI;
 
-const fetchGames = async () => {
+const fetchInitialData = async () => {
   loading.value = true;
 
   try {
-    const response = await axios.get<ApiGame[]>(gameListUri);
-    const data = response.data;
+    const [games, jackpots] = await Promise.all([
+      axios.get<ApiGame[]>(gameListUri),
+      axios.get<Jackpot[]>(jackpotUri),
+    ]);
 
-    allGames.value = data.map(apiGame => {
+    const mappedJackpot = new Map(jackpots.data.map(jackpot => [jackpot.game, jackpot.amount]))
+
+    allGames.value = games.data.map((apiGame: ApiGame) => {
       const otherCategories = ['ball', 'virtual', 'fun'];
       const belongsToOther = apiGame.categories.some(category => otherCategories.includes(category));
-
       const finalCategories = belongsToOther ? [...apiGame.categories, 'other'] : apiGame.categories;
 
       return {
@@ -44,10 +49,11 @@ const fetchGames = async () => {
         name: apiGame.name,
         image: `https://${apiGame.image}`,
         categories: finalCategories,
+        jackpot: mappedJackpot.get(apiGame.id)
       }
-    })
+    });
   } catch (error) {
-    console.error(`Failed to fetch games: ${error}`)
+    console.error(`Failed to fetch data: ${error}`)
   } finally {
     loading.value = false;
   }
@@ -67,8 +73,8 @@ const filteredGames = computed<IGame[]>(() => {
   });
 })
 
-onMounted(async () => {
-  await fetchGames()
+onMounted( () => {
+  fetchInitialData()
 })
 </script>
 

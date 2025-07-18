@@ -14,8 +14,8 @@ defineProps<{
     <div v-if="showRibbon" class="ribbon capitalize">
       {{ ribbonText }}
     </div>
-    <div class="jackpot">
-      {{ game.jackpot }}
+    <div v-if="game.jackpot" class="jackpot">
+      ${{ game.jackpot?.toLocaleString() }}
     </div>
 
     <img :src="game.image" :alt="game.name">
