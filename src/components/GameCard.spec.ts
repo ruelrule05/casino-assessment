@@ -27,11 +27,11 @@ describe('GameCard.vue', () => {
     expect(imageElement.attributes('src')).toBe(mockGame.image);
   });
 
-  it('displays the ribbon when showRibbon is true', () => {
+  it('displays the ribbon when showNewRibbon is true', () => {
     const wrapper = mount(GameCard, {
       props: {
         game: mockGame,
-        showRibbon: true,
+        showNewRibbon: true,
         ribbonText: 'New',
       },
     });
@@ -53,5 +53,39 @@ describe('GameCard.vue', () => {
 
     const ribbon = wrapper.find('.ribbon');
     expect(ribbon.exists()).toBe(false);
+  });
+
+  it('displays both new and top ribbons when both props are true', () => {
+    const wrapper = mount(GameCard, {
+      props: {
+        game: mockGame,
+        showNewRibbon: true,
+        showTopRibbon: true,
+      },
+    });
+
+    const newRibbon = wrapper.find('.new-ribbon');
+    const topRibbon = wrapper.find('.top-ribbon');
+
+    expect(newRibbon.exists()).toBe(true);
+    expect(topRibbon.exists()).toBe(true);
+    expect(newRibbon.text()).toBe('New');
+    expect(topRibbon.text()).toBe('Top');
+  });
+
+  it('displays only new ribbon when only showNewRibbon is true', () => {
+    const wrapper = mount(GameCard, {
+      props: {
+        game: mockGame,
+        showNewRibbon: true,
+        showTopRibbon: false,
+      },
+    });
+
+    const newRibbon = wrapper.find('.new-ribbon');
+    const topRibbon = wrapper.find('.top-ribbon');
+
+    expect(newRibbon.exists()).toBe(true);
+    expect(topRibbon.exists()).toBe(false);
   });
 });

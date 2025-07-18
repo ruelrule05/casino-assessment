@@ -3,16 +3,21 @@ import type {Game} from "@/types/Game.ts";
 
 defineProps<{
   game: Game,
-  showRibbon?: boolean;
-  ribbonText?: string;
+  showNewRibbon?: boolean;
+  showTopRibbon?: boolean;
 }>()
 
 </script>
 
 <template>
   <div class="game-card">
-    <div v-if="showRibbon" class="ribbon uppercase">
-      {{ ribbonText }}
+    <div v-if="showNewRibbon" class="ribbon new-ribbon uppercase">
+      New
+    </div>
+    <div v-if="showTopRibbon" class="ribbon uppercase"
+         :class="{'top-ribbon': showNewRibbon && showTopRibbon, 'new-ribbon': showTopRibbon && !showNewRibbon}"
+    >
+      Top
     </div>
     <div v-if="game.jackpot" class="jackpot">
       ${{ game.jackpot?.toLocaleString() }}
@@ -62,6 +67,17 @@ defineProps<{
   transform: rotate(45deg);
   z-index: 2;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.new-ribbon {
+  top: 8px;
+}
+
+.top-ribbon {
+  top: 25px;
+  width: 120px;
+  text-align: center;
+  right: -18px;
 }
 
 .jackpot {

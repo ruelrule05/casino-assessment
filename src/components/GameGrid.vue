@@ -14,6 +14,10 @@ const shouldShowRibbon = (game: IGame) => {
     return false;
   }
 
+  if (game.categories.includes("new") && game.categories.includes("top")) {
+    return false;
+  }
+
   return shouldShow;
 }
 
@@ -24,13 +28,35 @@ const getRibbonText = (game: IGame) => {
 
   return "";
 }
+
+const shouldShowNewRibbon = (game: IGame) => {
+  if (props.activeCategory === "new") {
+    return false;
+  }
+
+  return game.categories.includes("new");
+}
+
+const shouldShowTopRibbon = (game: IGame) => {
+  if (props.activeCategory === "top") {
+    return false;
+  }
+
+  return game.categories.includes("top");
+}
 </script>
 
 <template>
   <div class="game-grid">
     <div v-if="games.length === 0" class="no-games">No Games</div>
     <template v-else v-for="game in games" :key="game.id">
-      <GameCard :game="game" :show-ribbon="shouldShowRibbon(game)" :ribbon-text="getRibbonText(game)" />
+      <GameCard
+        :game="game"
+        :show-ribbon="shouldShowRibbon(game)"
+        :ribbon-text="getRibbonText(game)"
+        :show-new-ribbon="shouldShowNewRibbon(game)"
+        :show-top-ribbon="shouldShowTopRibbon(game)"
+      />
     </template>
   </div>
 </template>
